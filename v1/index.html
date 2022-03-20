@@ -1,0 +1,71 @@
+<!--IF we just type !( the basic setup of html os rendered)-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table with Sort functionality</title>
+    <!--CDN of font awesome icons-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <!--CDN of JQuery 3.6.0 version-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./tableManager.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Dynamic Table Sort and Pagination Functionaity</h1>
+    <!--Creating a table-->
+    <table class=""tablemanager">
+        <thead>
+            <tr>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Country</th>
+                <th class="disableFilterBy disableSort">Picture</th>
+            </tr>
+        </thead>
+        <tbody id="body">
+
+        </tbody>
+    </table>
+</body>
+<script>
+    fetch("https://randomuser.me/api/?results=40")
+        .then((res)=> res.json())
+        .then((data)=> {console.log(data)
+        
+            data.results.forEach((user) => {
+            //we are grabbing the body by its id.
+                $("#body").append(`
+                
+                <tr>
+                    <td>${user.name.first}</td>
+                    <td>${user.name.last}</td>
+                    <td>${user.location.country}</td>
+                    <td><img src="${user.picture.medium}"></td>
+                </tr>
+                `)
+                
+            });
+            //this is for enabling the sort functionality
+            $(".tableManager").tablemanager({
+                firstSort: [
+                    [3,0],
+                    [2,0],
+                    [1,"asc"],
+                ],
+                disable: ["last"],
+                appendFilterby: true,
+                debug: true,
+                vocabulary: {
+                    voc_filter_by: 'Filter By',
+                    voc_type_here_filter: 'Filter...',
+                    voc_show_rows: 'Rows Per Page'
+                },
+                pagination: true,
+                showrows: [5,10,20,50,100],
+            });
+        });
+</script>
+</html>
